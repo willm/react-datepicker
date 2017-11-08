@@ -12,7 +12,7 @@ module.exports = {
     publicPath: '/'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
 
     // Needed to direct the docs to the local version of the datepicker, this is not needed for
     // normal setup.
@@ -23,14 +23,28 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.scss/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader') },
-      { test: /\.css/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') }
+      {
+        test: /\.js/,
+        use: [
+          { loader: 'babel-loader', options: {'exclude': /node_modules/} },
+        ]
+      },
+      {
+        test: /\.scss/,
+        use: [
+          { loader: 'style-loader', options: {'sass-loader': true} }
+        ]
+      },
+      {
+        test: /\.css/,
+        use: [
+          { loader: 'css-loader' }
+        ]
+      }
     ]
   },
   node: { Buffer: false },
   plugins: [
-    new webpack.optimize.DedupePlugin(),
     new ExtractTextPlugin('style.css', { allChunks: true }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
